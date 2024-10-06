@@ -13,10 +13,16 @@ jobs:
   aur-publish:
     runs-on: ubuntu-latest
     steps:
+      - name: Extract version
+        id: extract_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+        env:
+          GITHUB_REF: ${{ github.ref }}
+
       - name: Publish AUR package
         uses: varabyte/update-aur-package@v1.0.4
         with:
-          tag_version_prefix: v
+          version: "$VERSION"
           package_name: topgrade
           commit_username: "Thomas Schönauer"
           commit_email: t.schoenauer@hgs-wt.at
